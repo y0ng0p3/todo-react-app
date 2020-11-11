@@ -1,0 +1,155 @@
+.backdrop {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+
+.modal {
+  position: fixed;
+  display: none;
+  z-index: 200;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  background: #d6e5e5f5;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.modal__title {
+  text-align: center;
+  margin: 0 0 1rem 0;
+  color: rgb(63, 48, 48);
+}
+
+.modal__actions {
+  text-align: center;
+}
+
+.modal__action {
+  border: 1px solid #37ee37;
+  background: #5fb35ffb;
+  text-decoration: none;
+  color: white;
+  font: inherit;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.modal__action:hover,
+.modal__action:active {
+  background: #37ee37;
+  border-color: #5fb35ffb;
+}
+
+.modal__action--negative {
+  border: 1px solid #6d5b5b;
+  background: #cf2648;
+  text-decoration: none;
+  color: white;
+  font: inherit;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.modal__action--negative:hover,
+.modal__action--negative:active {
+  background: #ff5454;
+  border-color: #cf2648;
+}
+
+.open {
+    display: block !important;
+}
+
+
+.todo--list__title {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #29b6f6;
+}
+
+.todo--header {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 2rem;
+}
+
+.todo--header__checkbox {
+  padding: 0 0.5rem;
+}
+
+.todo--header__checkbox input[type="checkbox"] {
+  padding: 0 2rem;
+}
+
+
+button {
+  border: 1px solid #eed3d3;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 1rem;
+}
+
+.add__todo {
+  background: #37ee37;
+  padding: 0 0.5rem;
+}
+
+.add__todo:hover, 
+.add__todo:active {
+  background: #fff;
+  color: #37ee37;
+  cursor: pointer;
+}
+
+.todo__number {
+  justify-items: flex-end;
+  color: #29b6f6;
+  padding: 0 2rem;
+}
+
+.todo--list__items {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.todo--list__item {
+  padding: 1rem 0;
+  display: flex;
+}
+
+.edit__todo {
+  background: #29b6f6;
+}
+
+.edit__todo:hover, :active {
+  background: #fff;
+  color: #29b6f6;
+  cursor: pointer;
+}
+
+.delete__todo {
+  background: #cf2648;
+}
+
+.delete__todo:hover, :active {
+  background: #fff;
+  color: #cf2648;
+  cursor: pointer;
+}
