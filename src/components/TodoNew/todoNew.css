@@ -1,0 +1,128 @@
+.new-formik {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.new-form__title {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #29b6f6;
+}
+
+.todo__number {
+  align-items: flex-end;
+  text-align: right;
+  color: #29b6f6;
+  padding: 0 0.5rem;
+}
+
+.new-form {
+  display: grid;
+  margin-top: 1rem;
+  padding: 1rem;
+  justify-content: center;
+  background-color: #d6e5e54d;
+  grid-row-gap: 1rem;
+}
+
+.new-form label {
+  font-weight: bold;
+}
+
+.new-form label,
+.new-form input {
+    display: block;
+    width: 100%;
+}
+
+.new-form button {
+  width: auto;
+  height: auto;
+}
+
+.new-form__control input[name="completeCheckbox"],
+.new-form__control input[name="completeCheckbox"] + label {
+    display: inline-block;
+    margin-right: 0.5rem;
+    width: auto;
+    vertical-align: bottom;
+}
+
+.new-form input:not([type="checkbox"]) {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.2rem 0.5rem;
+    font: inherit;
+}
+
+.new-form input:focus {
+    outline: none;
+    background: #97f09733;
+    border-color: #37ee37;
+}
+
+
+.new-form__control input[type='checkbox'] {
+  border: 1px solid #ccc;
+  background: white;
+  width: 1rem;
+  height: 1rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.new-form__control input[type='checkbox']:checked {
+  background: #37ee37;
+    border: #137713;
+}
+
+.new-form button {
+  border: 1px solid #eed3d3;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.new-form button[type="submit"] {
+  background: #37ee37;
+}
+
+.new-form button[type="submit"]:disabled {
+  cursor: not-allowed;
+  background: #97f097;
+  color: rgb(131, 123, 123);
+}
+
+.new-form button[type="submit"]:hover:disabled {
+  cursor: not-allowed;
+  background: #97f097;
+  color: rgb(131, 123, 123);
+}
+
+.new-form button[type="submit"]:hover, :active {
+  cursor: pointer;
+  background: #fff;
+  color: #37ee37;
+}
+
+.new-form .cancel {
+  background: #cf2648;
+}
+
+.new-form .cancel:hover, :active {
+  cursor: pointer;
+  background: #fff;
+  color: #cf2648;
+}
+
+.new-form__control button[type="submit"],
+.new-form__control button[type="submit"] + .progress {
+    display: inline-block;
+    margin-right: 0.5rem;
+    /* width: auto; */
+    vertical-align: bottom;
+}
