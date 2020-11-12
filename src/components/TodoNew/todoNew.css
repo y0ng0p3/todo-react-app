@@ -41,6 +41,15 @@
   height: auto;
 }
 
+.error {
+  color: red;
+}
+
+.new-form__control {
+  display: grid;
+  justify-items: start;
+}
+
 .new-form__control input[name="completeCheckbox"],
 .new-form__control input[name="completeCheckbox"] + label {
     display: inline-block;

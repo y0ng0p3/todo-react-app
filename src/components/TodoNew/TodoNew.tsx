@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { CircularProgress } from '@material-ui/core';
 
+import './todoNew.css';
+
     const initialValues = {
         name: '',
         dueDate: null,
@@ -16,28 +18,43 @@ import { CircularProgress } from '@material-ui/core';
         complete: Yup.boolean()
     })
 
-/*const onSubmit = (values, onSubmitProps) => {
-        setTimeout(() => {
-            console.log('Form date', values);
-            onSubmitProps.setSubmitting(false);
-            history.push("/list");
-    }, 3000);
- */
+    const validate = (values: { name: any; dueDate: any}) => {
+        let errors = { name: '', dueDate: '' };
+
+        if(!values.name) {
+            errors.name = 'Required !';
+        }
+
+        if(!values.dueDate) {
+            errors.dueDate = 'Required !';
+        }
+
+        return errors;
+    }
+
+    
+    
+    
 function TodoNew() {
-
     const history = useHistory();
-
-    const formik = useFormik({
-        initialValues,
-        onSubmit: (values, onSubmitProps) => {
+    
+    
+    const onSubmit = (values: any, onSubmitProps: any) => {
             setTimeout(() => {
                 console.log('Form date', values);
                 onSubmitProps.setSubmitting(false);
                 history.push("/list");
         }, 3000);
-        },
+    }
+
+    const formik = useFormik({
+        initialValues,
+        onSubmit,
+        // validate
         validationSchema
     });
+
+    console.log('Formik errors', formik.errors);
     
     const [query, setQuery] = React.useState('idle');
     const timerRef = React.useRef();
@@ -82,6 +99,7 @@ function TodoNew() {
                     type="text"
                     {...formik.getFieldProps('name')}
                 />
+                {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
             </div>
 
             <div className='new-form__control'>
@@ -91,6 +109,7 @@ function TodoNew() {
                     type="text"
                     {...formik.getFieldProps('dueDate')}
                 />
+                {formik.touched.dueDate && formik.errors.dueDate ? <div className="error">{formik.errors.dueDate}</div> : null}
             </div>
 
             <div className='new-form__control'>
