@@ -1,6 +1,7 @@
 .new-formik {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -11,8 +12,7 @@
 }
 
 .todo__number {
-  align-items: flex-end;
-  text-align: right;
+  justify-self: flex-end;
   color: #29b6f6;
   padding: 0 0.5rem;
 }
@@ -22,6 +22,7 @@
   margin-top: 1rem;
   padding: 1rem;
   justify-content: center;
+  justify-items: start;
   background-color: #d6e5e54d;
   grid-row-gap: 1rem;
 }
@@ -32,8 +33,9 @@
 
 .new-form label,
 .new-form input {
-    display: block;
-    width: 100%;
+  width: 100%;
+  padding: 0.5rem 0;
+  text-align: left;
 }
 
 .new-form button {
@@ -50,8 +52,8 @@
   justify-items: start;
 }
 
-.new-form__control input[name="completeCheckbox"],
-.new-form__control input[name="completeCheckbox"] + label {
+.new-form__control input[type="checkbox"],
+.new-form__control input[type="checkbox"] + label {
     display: inline-block;
     margin-right: 0.5rem;
     width: auto;
@@ -112,7 +114,8 @@
   color: rgb(131, 123, 123);
 }
 
-.new-form button[type="submit"]:hover, :active {
+.new-form button[type="submit"]:hover, 
+.new-form button[type="submit"]:active {
   cursor: pointer;
   background: #fff;
   color: #37ee37;
@@ -122,7 +125,8 @@
   background: #cf2648;
 }
 
-.new-form .cancel:hover, :active {
+.new-form .cancel:hover, 
+.new-form .cancel:active {
   cursor: pointer;
   background: #fff;
   color: #cf2648;

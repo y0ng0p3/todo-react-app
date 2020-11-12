@@ -6,31 +6,31 @@ import { CircularProgress } from '@material-ui/core';
 
 import './todoNew.css';
 
-    const initialValues = {
-        name: '',
-        dueDate: null,
-        complete: false
+const initialValues = {
+    name: '',
+    dueDate: null,
+    complete: false
+}
+
+const validationSchema = Yup.object({
+    name: Yup.string().required('Required !'),
+    dueDate: Yup.date().required('Required !').nullable(),
+    complete: Yup.boolean()
+})
+
+/*  const validate = (values: { name: any; dueDate: any}) => {
+    let errors = { name: '', dueDate: '' };
+
+    if(!values.name) {
+        errors.name = 'Required !';
     }
 
-    const validationSchema = Yup.object({
-        name: Yup.string().required('Required !'),
-        dueDate: Yup.date().required('Required !').nullable(),
-        complete: Yup.boolean()
-    })
-
-    const validate = (values: { name: any; dueDate: any}) => {
-        let errors = { name: '', dueDate: '' };
-
-        if(!values.name) {
-            errors.name = 'Required !';
-        }
-
-        if(!values.dueDate) {
-            errors.dueDate = 'Required !';
-        }
-
-        return errors;
+    if(!values.dueDate) {
+        errors.dueDate = 'Required !';
     }
+
+    return errors;
+} */
 
     
     
@@ -50,7 +50,6 @@ function TodoNew() {
     const formik = useFormik({
         initialValues,
         onSubmit,
-        // validate
         validationSchema
     });
 
@@ -91,48 +90,56 @@ function TodoNew() {
     };
 
     return (
-        <form onSubmit={formik.handleSubmit} className='new-form'>
-            <div className='new-form__control'>
-                <label htmlFor="name">Name</label>
-                <input
-                    id="name"
-                    type="text"
-                    {...formik.getFieldProps('name')}
-                />
-                {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
-            </div>
-
-            <div className='new-form__control'>
-                <label htmlFor="dueDate">Due Date</label>
-                <input
-                    id="dueDate"
-                    type="text"
-                    {...formik.getFieldProps('dueDate')}
-                />
-                {formik.touched.dueDate && formik.errors.dueDate ? <div className="error">{formik.errors.dueDate}</div> : null}
-            </div>
-
-            <div className='new-form__control'>
-                <input
-                    id="complete"
-                    type="checkbox"
-                    {...formik.getFieldProps('complete')}
-                />
-                <label htmlFor="complete">Complete</label>
-            </div>
-            <button 
-                type="submit"
-                disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}
-                onClick={handleClickQuery}
-            >
-                Save
-            </button>
-            {formik.isSubmitting && (
-                <div>
-                    <CircularProgress />
+        <div className="new-formik">
+            <h1 className="new-form__title">Add a new todo</h1>
+            <div className="todo__number">2</div>
+            <form onSubmit={formik.handleSubmit} className='new-form'>
+                <div className='new-form__control'>
+                    <label htmlFor="name">Name</label>
+                    <input
+                        id="name"
+                        type="text"
+                        {...formik.getFieldProps('name')}
+                    />
+                    {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
                 </div>
-            )}
-        </form>
+
+                <div className='new-form__control'>
+                    <label htmlFor="dueDate">Due Date</label>
+                    <input
+                        id="dueDate"
+                        type="text"
+                        {...formik.getFieldProps('dueDate')}
+                    />
+                    {formik.touched.dueDate && formik.errors.dueDate ? <div className="error">{formik.errors.dueDate}</div> : null}
+                </div>
+
+                <div className='new-form__control'>
+                    <input
+                        id="complete"
+                        type="checkbox"
+                        {...formik.getFieldProps('complete')}
+                    />
+                    <label htmlFor="complete">Complete</label>
+                </div>
+
+                <div className="new-form__control">
+                    <button type="reset" className="cancel">Cancel</button>
+                    <button 
+                        type="submit"
+                        disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}
+                        onClick={handleClickQuery}
+                    >
+                        Save
+                    </button>
+                    {formik.isSubmitting && (
+                        <div>
+                            <CircularProgress />
+                        </div>
+                    )}
+                </div>
+            </form>
+        </div>
     )
 }
 
