@@ -37,7 +37,7 @@ const validationSchema = Yup.object({
     
     
     
-function TodoNew() {
+function TodoEdit() {
     const history = useHistory();
     
     
@@ -165,4 +165,4 @@ function TodoNew() {
     )
 }
 
-export default TodoNew
+export default TodoEdit
