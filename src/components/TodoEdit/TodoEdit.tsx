@@ -1,14 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState } from "react"
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { CircularProgress } from '@material-ui/core';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import useStore from '../../App';
+import './todoEdit.css';
 
-import useStore from '../../App'
-import './todoNew.css';
+/*  const validate = (values: { name: any; dueDate: any}) => {
+    let errors = { name: '', dueDate: '' };
 
+    if(!values.name) {
+        errors.name = 'Required !';
+    }
+
+    if(!values.dueDate) {
+        errors.dueDate = 'Required !';
+    }
+
+    return errors;
+} */
+
+    
+function TodoEdit() {
+    const history = useHistory();
+    
     const initialValues = {
         name: '',
         dueDate: null,
@@ -21,26 +38,6 @@ import './todoNew.css';
         complete: Yup.boolean()
     })
 
-    const validate = (values: { name: any; dueDate: any}) => {
-        let errors = { name: '', dueDate: '' };
-
-        if(!values.name) {
-            errors.name = 'Required !';
-        }
-
-        if(!values.dueDate) {
-            errors.dueDate = 'Required !';
-        }
-
-        return errors;
-    }
-
-    
-    
-    
-function TodoNew() {
-    const history = useHistory();
-    
     
     const onSubmit = (values: any, onSubmitProps: any) => {
             setTimeout(() => {
@@ -53,7 +50,6 @@ function TodoNew() {
     const formik = useFormik({
         initialValues,
         onSubmit,
-        // validate
         validationSchema
     });
 
@@ -93,11 +89,12 @@ function TodoNew() {
         }, 3000);
     };
 
+    
     const [ startDate, setStartDate ] = useState(new Date());
 
     return (
         <div className="formik">
-            <h1 className="form__title">Add a new todo</h1>
+            <h1 className="form__title">Edit _____ todo</h1>
             <div className="todo__number">2</div>
             <form onSubmit={formik.handleSubmit} className='form'>
                 <div className='form__control'>
@@ -110,6 +107,8 @@ function TodoNew() {
                     {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
                 </div>
 
+                {console.log('formik', formik)}
+
                 <div className='form__control'>
                     <label htmlFor="dueDate">Due Date</label>
                     <input
@@ -117,24 +116,6 @@ function TodoNew() {
                         type="date"
                         {...formik.getFieldProps('dueDate')}
                     />
-                    {/* {
-                        () => {
-                            const { setFieldValue } = formik
-                            const value = formik.values.dueDate
-                            const name = "dueDate"
-                            return (
-                                <DateView 
-                                    id={name} 
-                                    selected={value}
-                                    onChange={
-                                        (val: any) => {
-                                            setFieldValue(name, val)
-                                        }
-                                    } 
-                                />
-                            );
-                        }
-                    } */}
                     {/* <DatePicker  selected={startDate} onChange={date => setStartDate(date)} /> */}
                     {formik.touched.dueDate && formik.errors.dueDate ? <div className="error">{formik.errors.dueDate}</div> : null}
                 </div>
@@ -168,4 +149,4 @@ function TodoNew() {
     )
 }
 
-export default TodoNew
+export default TodoEdit
