@@ -1,35 +1,39 @@
-import React, { useState } from "react"
+>import React from "react"
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { CircularProgress } from '@material-ui/core';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import useStore from '../../App';
+
 import './todoEdit.css';
-
-/*  const validate = (values: { name: any; dueDate: any}) => {
-    let errors = { name: '', dueDate: '' };
-
-    if(!values.name) {
-        errors.name = 'Required !';
-    }
-
-    if(!values.dueDate) {
-        errors.dueDate = 'Required !';
-    }
-
-    return errors;
-} */
+import { useTodoStore } from "../../stores/todo.store";
 
     
-function TodoEdit() {
+function TodoEdit(props: { match: { params: { id: any; }; }; }) {
+    const {todos, updateTodo} = useTodoStore();
+
     const history = useHistory();
+
+    const todo_id = props.match.params.id;
+
+    let todoToEdit;
+    
+    const retrieveTodo= () => {
+        let todo
+        for(var i = 0; i < todos.length; i++) {
+            if(todos[i].id === todo_id) {
+                todo = todos[i];
+            }
+        }
+        return todo;
+    }
+    
+    todoToEdit = retrieveTodo()!;
     
     const initialValues = {
-        name: '',
-        dueDate: null,
-        complete: false
+        id: todoToEdit.id,
+        name: todoToEdit.name,
+        dueDate: todoToEdit.dueDate,
+        complete: todoToEdit.complete
     }
 
     const validationSchema = Yup.object({
@@ -41,7 +45,8 @@ function TodoEdit() {
     
     const onSubmit = (values: any, onSubmitProps: any) => {
             setTimeout(() => {
-                console.log('Form date', values);
+                console.log('updated data', values);
+                updateTodo(values);
                 onSubmitProps.setSubmitting(false);
                 history.push("/list");
         }, 3000);
@@ -65,16 +70,6 @@ function TodoEdit() {
         [],
     );
 
-    /* const onSubmit = (values, onSubmitProps) => {
-
-        console.log('Form data', values);
-        setTimeout(() => {
-            onSubmitProps.setSubmitting(false);
-            history.push("/list");
-        }, 3000);
-
-    }; */
-
     const handleClickQuery = () => {
         clearTimeout(timerRef.current);
 
@@ -89,13 +84,12 @@ function TodoEdit() {
         }, 3000);
     };
 
-    
-    const [ startDate, setStartDate ] = useState(new Date());
+    console.log('todoToEdit', todoToEdit);
 
     return (
         <div className="formik">
-            <h1 className="form__title">Edit _____ todo</h1>
-            <div className="todo__number">2</div>
+            <h1 className="form__title">Edit the "{formik.values.name}" todo</h1>
+            <div className="todo__number">{todos.length}</div>
             <form onSubmit={formik.handleSubmit} className='form'>
                 <div className='form__control'>
                     <label htmlFor="name">Name</label>
@@ -103,6 +97,7 @@ function TodoEdit() {
                         id="name"
                         type="text"
                         {...formik.getFieldProps('name')}
+                        value={formik.values.name}
                     />
                     {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
                 </div>
@@ -116,7 +111,6 @@ function TodoEdit() {
                         type="date"
                         {...formik.getFieldProps('dueDate')}
                     />
-                    {/* <DatePicker  selected={startDate} onChange={date => setStartDate(date)} /> */}
                     {formik.touched.dueDate && formik.errors.dueDate ? <div className="error">{formik.errors.dueDate}</div> : null}
                 </div>
 
@@ -125,12 +119,13 @@ function TodoEdit() {
                         id="complete"
                         type="checkbox"
                         {...formik.getFieldProps('complete')}
+                        checked={formik.values.complete}
                     />
                     <label htmlFor="complete">Complete</label>
                 </div>
 
                 <div className="form__control">
-                    <button type="reset" className="cancel">Cancel</button>
+                    <button type="button" className="cancel" onChange={formik.handleReset}>Cancel</button>
                     <button 
                         type="submit"
                         disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}

@@ -12,7 +12,8 @@ function Routes() {
             <Route exact path="/" component={TodoList}/>
             <Route path="/list" component={TodoList} />
             <Route path="/new" component={TodoNew}/>
-            <Route path="/edit" component={TodoEdit}/>
+            {/* <Route path="/edit" component={TodoEdit}/> */}
+            <Route path="/edit/:id" component={TodoEdit}/>
         </Switch>
     )
 }

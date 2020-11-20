@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { CircularProgress } from '@material-ui/core';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import * as uuid from 'uuid';
 
-import useStore from '../../App'
 import './todoNew.css';
+import { useTodoStore } from '../../stores/todo.store';
 
+    
+function TodoNew() {
+    const {todos, addTodo} = useTodoStore();
+
+    const history = useHistory();
+    
     const initialValues = {
+        id: '',
         name: '',
         dueDate: null,
         complete: false
@@ -20,31 +26,12 @@ import './todoNew.css';
         dueDate: Yup.date().required('Required !').nullable(),
         complete: Yup.boolean()
     })
-
-    const validate = (values: { name: any; dueDate: any}) => {
-        let errors = { name: '', dueDate: '' };
-
-        if(!values.name) {
-            errors.name = 'Required !';
-        }
-
-        if(!values.dueDate) {
-            errors.dueDate = 'Required !';
-        }
-
-        return errors;
-    }
-
-    
-    
-    
-function TodoNew() {
-    const history = useHistory();
-    
-    
+  
     const onSubmit = (values: any, onSubmitProps: any) => {
             setTimeout(() => {
-                console.log('Form date', values);
+                values.id = uuid.v4();
+                console.log('Form data', values);
+                addTodo(values);
                 onSubmitProps.setSubmitting(false);
                 history.push("/list");
         }, 3000);
@@ -53,7 +40,6 @@ function TodoNew() {
     const formik = useFormik({
         initialValues,
         onSubmit,
-        // validate
         validationSchema
     });
 
@@ -69,16 +55,6 @@ function TodoNew() {
         [],
     );
 
-    /* const onSubmit = (values, onSubmitProps) => {
-
-        console.log('Form data', values);
-        setTimeout(() => {
-            onSubmitProps.setSubmitting(false);
-            history.push("/list");
-        }, 3000);
-
-    }; */
-
     const handleClickQuery = () => {
         clearTimeout(timerRef.current);
 
@@ -93,19 +69,19 @@ function TodoNew() {
         }, 3000);
     };
 
-    const [ startDate, setStartDate ] = useState(new Date());
-
     return (
         <div className="formik">
             <h1 className="form__title">Add a new todo</h1>
-            <div className="todo__number">2</div>
+            <div className="todo__number">{todos.length}</div>
             <form onSubmit={formik.handleSubmit} className='form'>
                 <div className='form__control'>
                     <label htmlFor="name">Name</label>
                     <input
                         id="name"
                         type="text"
+                        placeholder="Enter the to-do name."
                         {...formik.getFieldProps('name')}
+                        value={formik.values.name}
                     />
                     {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
                 </div>
@@ -117,25 +93,6 @@ function TodoNew() {
                         type="date"
                         {...formik.getFieldProps('dueDate')}
                     />
-                    {/* {
-                        () => {
-                            const { setFieldValue } = formik
-                            const value = formik.values.dueDate
-                            const name = "dueDate"
-                            return (
-                                <DateView 
-                                    id={name} 
-                                    selected={value}
-                                    onChange={
-                                        (val: any) => {
-                                            setFieldValue(name, val)
-                                        }
-                                    } 
-                                />
-                            );
-                        }
-                    } */}
-                    {/* <DatePicker  selected={startDate} onChange={date => setStartDate(date)} /> */}
                     {formik.touched.dueDate && formik.errors.dueDate ? <div className="error">{formik.errors.dueDate}</div> : null}
                 </div>
 
@@ -144,12 +101,13 @@ function TodoNew() {
                         id="complete"
                         type="checkbox"
                         {...formik.getFieldProps('complete')}
+                        checked={formik.values.complete}
                     />
                     <label htmlFor="complete">Complete</label>
                 </div>
 
                 <div className="form__control">
-                    <button type="reset" className="cancel">Cancel</button>
+                    <button type="button" className="cancel" onClick={formik.handleReset}>Cancel</button>
                     <button 
                         type="submit"
                         disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}
