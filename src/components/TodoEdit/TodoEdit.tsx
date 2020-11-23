@@ -1,24 +1,39 @@
-import React from 'react'
+import React from "react"
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { CircularProgress } from '@material-ui/core';
-import * as uuid from 'uuid';
 
-import './todoNew.css';
-import { useTodoStore } from '../../stores/todo.store';
+import './todoEdit.css';
+import { useTodoStore } from "../../stores/todo.store";
 
     
-function TodoNew() {
-    const {todos, addTodo} = useTodoStore();
+function TodoEdit(props: { match: { params: { id: any; }; }; }) {
+    const {todos, updateTodo} = useTodoStore();
 
     const history = useHistory();
+
+    const todo_id = props.match.params.id;
+
+    let todoToEdit;
+    
+    const retrieveTodo= () => {
+        let todo
+        for(var i = 0; i < todos.length; i++) {
+            if(todos[i].id === todo_id) {
+                todo = todos[i];
+            }
+        }
+        return todo;
+    }
+    
+    todoToEdit = retrieveTodo()!;
     
     const initialValues = {
-        id: '',
-        name: '',
-        dueDate: null,
-        complete: false
+        id: todoToEdit.id,
+        name: todoToEdit.name,
+        dueDate: todoToEdit.dueDate,
+        complete: todoToEdit.complete
     }
 
     const validationSchema = Yup.object({
@@ -26,12 +41,12 @@ function TodoNew() {
         dueDate: Yup.date().required('Required !').nullable(),
         complete: Yup.boolean()
     })
-  
+
+    
     const onSubmit = (values: any, onSubmitProps: any) => {
             setTimeout(() => {
-                values.id = uuid.v4();
-                console.log('Form data', values);
-                addTodo(values);
+                console.log('updated data', values);
+                updateTodo(values);
                 onSubmitProps.setSubmitting(false);
                 history.push("/list");
         }, 3000);
@@ -69,9 +84,11 @@ function TodoNew() {
         }, 3000);
     };
 
+    console.log('todoToEdit', todoToEdit);
+
     return (
         <div className="formik">
-            <h1 className="form__title">Add a new todo</h1>
+            <h1 className="form__title">Edit the "{formik.values.name}" todo</h1>
             <div className="todo__number">{todos.length}</div>
             <form onSubmit={formik.handleSubmit} className='form'>
                 <div className='form__control'>
@@ -79,12 +96,13 @@ function TodoNew() {
                     <input
                         id="name"
                         type="text"
-                        placeholder="Enter the to-do name."
                         {...formik.getFieldProps('name')}
                         value={formik.values.name}
                     />
                     {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
                 </div>
+
+                {console.log('formik', formik)}
 
                 <div className='form__control'>
                     <label htmlFor="dueDate">Due Date</label>
@@ -107,7 +125,7 @@ function TodoNew() {
                 </div>
 
                 <div className="form__control">
-                    <button type="button" className="cancel" onClick={formik.handleReset}>Cancel</button>
+                    <button type="button" className="cancel" onChange={formik.handleReset}>Cancel</button>
                     <button 
                         type="submit"
                         disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}
@@ -126,4 +144,4 @@ function TodoNew() {
     )
 }
 
-export default TodoNew
+export default TodoEdit

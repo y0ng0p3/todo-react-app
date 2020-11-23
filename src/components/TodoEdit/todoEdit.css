@@ -73,7 +73,7 @@
 
 .form__control input[type='checkbox']:checked {
   background: #37ee37;
-  border: #137713;
+    border: #137713;
 }
 
 .form__control:nth-child(4) {

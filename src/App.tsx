@@ -6,6 +6,7 @@ import Navbar from './components/Navbar/Navbar'
 import Routes from './routes/Routes';
 
 function App() {
+ 
   return (
     <div className="App">
       <Navbar />

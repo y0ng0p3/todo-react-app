@@ -1,32 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
+
+import { ITodo, useTodoStore } from '../../stores/todo.store';
 
 import './todoList.css';
 
 
 function TodoList() {
+    let deleteArray: string[] = [];
+
+    const {todos, deleteTodo} = useTodoStore();
 
     const history = useHistory();
 
-    const todoList = [
-        { id: 1, name: 'React', date: null, complete: 'Complete' },
-        { id: 2, name: 'React', date: null, complete: 'Incomplete' },
-    ];
+    const [completeChecked, setCompleteChecked] = useState<boolean>(false)
+    const [incompleteChecked, setIncompleteChecked] = useState<boolean>(false)
 
-    const checkboxListOptions = [
-        {key: 'Complete', value: 'complete'},
-        {key: 'Incomplete', value: 'incomplete'}
-    ];
-
-        const addTodo = () => {
+    const addTodo = () => {
         history.push('/new');
     }
 
-    const editTodo = () => {
-        history.push('/edit');
+    const editTodo = (todo: ITodo) => {
+        /* history.push('/edit'); */
+        history.push('/edit/' + todo.id);
     }
 
-    const deleteTodo = () => {
+    const dTodo = (ids: string[]) => {
         const backdrop = document.querySelector(".backdrop");
         const modal = document.querySelector(".modal");
         const modalYesButton = document.querySelector(".modal__action"); 
@@ -49,7 +48,9 @@ function TodoList() {
             modal?.classList.remove("open");
             backdrop?.classList.remove("open");
             history.push('/list');
+            deleteTodo(ids);
         });
+
     }
     
 
@@ -69,45 +70,123 @@ function TodoList() {
 
             <div className="todo--header">
                 <div className="todo--header__checkbox">
-                    {checkboxListOptions.map(option => {
-                        return (
-                            <React.Fragment key={option.key}>
-                                <input
-                                    type="checkbox"
-                                    id={option.value}
-                                    value={option.value}
-                                />
-                                <label htmlFor={option.value}>{option.key}</label>
-                            </React.Fragment>
-                        )
-                    })
-                    }
+                    <input
+                        type="checkbox"
+                        id="complete"
+                        checked={completeChecked}
+                        onChange={(event) => setCompleteChecked(event.target.checked)}
+                    />
+                    <label htmlFor="complete">Complete</label>
                 </div>
+
+                <div className="todo--header__checkbox">
+                    <input
+                        type="checkbox"
+                        id="incomplete"
+                        checked={incompleteChecked}
+                        onChange={(event) => setIncompleteChecked(event.target.checked)}
+                    />
+                    <label htmlFor="incomplete">Incomplete</label>
+                </div>
+
                 <button type="button" className="add__todo" onClick={addTodo}>New</button>
-                <div className="todo__number">{todoList.length}</div>
+                <div className="todo__number">{todos.length}</div>
             </div>
 
             <div className="todo--list__items">
-                {todoList.map(todo => {
+                {completeChecked && !incompleteChecked ? (
+                    todos.map(todo => {
+                        if(todo.complete === true){
+                            return (
+                                <React.Fragment key={todo.id}>
+                                    <div className="todo--list__item">
+                                        <div>{todo.name}</div>
+                                        <div>{todo.dueDate}</div>
+                                        <div className="complete--container">
+                                            <input
+                                                type="checkbox"
+                                                id="complete"
+                                                checked={todo.complete}
+                                            />
+                                            <label htmlFor="complete">Complete</label>
+                                        </div>
+                                        <button type="button" className="edit__todo" onClick={() => editTodo(todo)}>Edit</button>
+                                        <button type="button" className="delete__todo" onClick={() => dTodo(deleteArray = [...deleteArray, todo.id])}>Delete</button>
+                                    </div>
+                                </React.Fragment>
+                            )
+                        }
+                    })
+                ): incompleteChecked && !completeChecked ? (
+                    todos.map(todo => {
+                        if(todo.complete === false){
+                            return (
+                                <React.Fragment key={todo.id}>
+                                    <div className="todo--list__item">
+                                        <div>{todo.name}</div>
+                                        <div>{todo.dueDate}</div>
+                                        <div className="complete--container">
+                                            <input
+                                                type="checkbox"
+                                                id="complete"
+                                                checked={todo.complete}
+                                            />
+                                            <label htmlFor="complete">Complete</label>
+                                        </div>
+                                        <button type="button" className="edit__todo" onClick={() => editTodo(todo)}>Edit</button>
+                                        <button type="button" className="delete__todo" onClick={() => dTodo(deleteArray = [...deleteArray, todo.id])}>Delete</button>
+                                    </div>
+                                </React.Fragment>
+                            )
+                        }
+                    })
+                ): todos.map(todo => {
+                        return (
+                            <React.Fragment key={todo.id}>
+                                <div className="todo--list__item">
+                                    <div>{todo.name}</div>
+                                    <div>{todo.dueDate}</div>
+                                    <div className="complete--container">
+                                        <input
+                                            type="checkbox"
+                                            id="complete"
+                                            checked={todo.complete}
+                                        />
+                                        <label htmlFor="complete">Complete</label>
+                                    </div>
+                                    <button type="button" className="edit__todo" onClick={() => editTodo(todo)}>Edit</button>
+                                    <button type="button" className="delete__todo" onClick={() => dTodo(deleteArray = [...deleteArray, todo.id])}>Delete</button>
+                                </div>
+                            </React.Fragment>
+                        )
+                    })
+                }
+            </div>
+                
+
+            {/* <div className="todo--list__items">
+                {todos.map(todo => {
                     return (
                         <React.Fragment key={todo.id}>
                             <div className="todo--list__item">
                                 <div>{todo.name}</div>
-                                <div>{todo.date}</div>
-                                <input
-                                    type="checkbox"
-                                    id="complete"
-                                    value={todo.complete}
-                                />
-                                <label htmlFor="complete">{todo.complete}</label>
-                                <button type="button" className="edit__todo" onClick={editTodo}>Edit</button>
-                                <button type="button" className="delete__todo" onClick={deleteTodo} >Delete</button>
+                                <div>{todo.dueDate}</div>
+                                <div className="complete--container">
+                                    <input
+                                        type="checkbox"
+                                        id="complete"
+                                        checked={todo.complete}
+                                    />
+                                    <label htmlFor="complete">Complete</label>
+                                </div>
+                                <button type="button" className="edit__todo" onClick={() => editTodo(todo)}>Edit</button>
+                                <button type="button" className="delete__todo" onClick={() => dTodo(deleteArray = [...deleteArray, todo.id])}>Delete</button>
                             </div>
                         </React.Fragment>
                     )
                 })
                 }
-            </div>
+            </div> */}
         </div>
     )
 }
