@@ -3,7 +3,7 @@ import create, { SetState, GetState } from 'zustand';
 export interface ITodo {
     id: string,
     name: string,
-    dueDate: Date,
+    dueDate: Date | null,
     complete: boolean
 }
 
@@ -39,6 +39,7 @@ export const useTodoStore = create<TodoStore>(
         deleteTodo: (ids: string[]) => {
             const {todos} = get();
             for(var i = 0; i < ids.length; i++) {
+                // eslint-disable-next-line no-loop-func
                 set({todos: todos.filter(todo => todo.id !== ids[i])});
             }
         }

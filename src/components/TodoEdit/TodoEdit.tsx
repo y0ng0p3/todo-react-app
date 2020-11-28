@@ -3,8 +3,17 @@ import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { CircularProgress } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
+import ClearIcon from '@material-ui/icons/Clear';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@material-ui/core/TextField';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
-import './todoEdit.css';
+
+import styles from './TodoEdit.module.css';
 import { useTodoStore } from "../../stores/todo.store";
 
     
@@ -38,17 +47,16 @@ function TodoEdit(props: { match: { params: { id: any; }; }; }) {
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Required !'),
-        dueDate: Yup.date().required('Required !').nullable(),
+        dueDate: Yup.string().required('Required !').nullable(),
         complete: Yup.boolean()
     })
 
     
     const onSubmit = (values: any, onSubmitProps: any) => {
-            setTimeout(() => {
-                console.log('updated data', values);
-                updateTodo(values);
-                onSubmitProps.setSubmitting(false);
-                history.push("/list");
+        setTimeout(() => {
+            updateTodo(values);
+            onSubmitProps.setSubmitting(false);
+            history.push("/");
         }, 3000);
     }
 
@@ -57,8 +65,6 @@ function TodoEdit(props: { match: { params: { id: any; }; }; }) {
         onSubmit,
         validationSchema
     });
-
-    console.log('Formik errors', formik.errors);
     
     const [query, setQuery] = React.useState('idle');
     const timerRef = React.useRef();
@@ -84,55 +90,76 @@ function TodoEdit(props: { match: { params: { id: any; }; }; }) {
         }, 3000);
     };
 
-    console.log('todoToEdit', todoToEdit);
-
     return (
-        <div className="formik">
-            <h1 className="form__title">Edit the "{formik.values.name}" todo</h1>
-            <div className="todo__number">{todos.length}</div>
-            <form onSubmit={formik.handleSubmit} className='form'>
-                <div className='form__control'>
-                    <label htmlFor="name">Name</label>
-                    <input
+        <div className={styles.formik}>
+            <h1 className={styles.form__title}>Edit the "{formik.values.name}" todo</h1>
+            <div className={styles.todo__number}>{todos.length}</div>
+            <form onSubmit={formik.handleSubmit} className={styles.form}>
+                <div className={styles.form__control}>
+                     <TextField 
+                        size="small"
                         id="name"
-                        type="text"
+                        label="Name" 
                         {...formik.getFieldProps('name')}
                         value={formik.values.name}
-                    />
-                    {formik.touched.name && formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
+                        helperText={formik.touched.name && formik.errors.name ? <div className={styles.error}>{formik.errors.name}</div> : null}
+                        variant="outlined" 
+                    />    
                 </div>
 
-                {console.log('formik', formik)}
-
-                <div className='form__control'>
-                    <label htmlFor="dueDate">Due Date</label>
-                    <input
+                <div className={styles.form__control}>
+                    <TextField
+                        size="small"
                         id="dueDate"
                         type="date"
+                        label="Due Date"
                         {...formik.getFieldProps('dueDate')}
+                        value={formik.values.dueDate}
+                        helperText={formik.touched.dueDate && formik.errors.dueDate ? <div className={styles.error}>{formik.errors.dueDate}</div> : null}
+                        variant="outlined"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
-                    {formik.touched.dueDate && formik.errors.dueDate ? <div className="error">{formik.errors.dueDate}</div> : null}
                 </div>
 
-                <div className='form__control'>
-                    <input
-                        id="complete"
-                        type="checkbox"
-                        {...formik.getFieldProps('complete')}
-                        checked={formik.values.complete}
+                <div className={styles.form__control}>
+                   <FormControlLabel 
+                        control={
+                            <Checkbox
+                                size="small"
+                                {...formik.getFieldProps('complete')}
+                                checked={formik.values.complete}
+                                color="primary"
+                            />
+                        }
+                        label="Complete"
                     />
-                    <label htmlFor="complete">Complete</label>
                 </div>
 
-                <div className="form__control">
-                    <button type="button" className="cancel" onChange={formik.handleReset}>Cancel</button>
-                    <button 
+                <div className={styles.form__control}>
+                    <Button
+                        startIcon={<ClearIcon />}
+                        size="small"
+                        variant="contained"
+                        color="secondary"
+                        className={styles.cancel}
+                        onClick={formik.handleReset}
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                        startIcon={<SaveIcon />}
+                        size="small"
+                        variant="contained"
                         type="submit"
+                        color="primary"
                         disabled={!(formik.dirty && formik.isValid) || formik.isSubmitting}
                         onClick={handleClickQuery}
                     >
                         Save
-                    </button>
+                    </Button>
                     {formik.isSubmitting && (
                         <div>
                             <CircularProgress />

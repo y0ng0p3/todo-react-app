@@ -1,0 +1,128 @@
+.formik {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.form__title {
+  font-size: 1.8rem;
+  color: #29b6f6;
+}
+
+.todo__number {
+  color: #29b6f6;
+  padding: 0 0.5rem;
+}
+
+.form {
+  display: grid;
+  padding: 1rem 2rem;
+  justify-content: center;
+  justify-items: start;
+  background-color: #d6e5e54d;
+  grid-row-gap: 1rem;
+  width: 100%;
+}
+
+.form label {
+  font-weight: bold;
+}
+
+.form button {
+  width: auto;
+  height: auto;
+}
+
+.error {
+  color: red;
+}
+
+.form__control {
+  display: grid;
+  justify-items: start;
+}
+
+/* .form input:not([type="checkbox"]) {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.2rem 0.5rem;
+  font: inherit;
+}
+
+.form input:focus {
+  outline: none;
+  background: #97f09733;
+  border-color: #37ee37;
+} */
+
+/* .form__control:nth-child(3) {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+.form__control input[type='checkbox'] {
+  border: 1px solid #ccc;
+  background: rgb(204, 188, 188);
+  width: 1rem;
+  height: 1rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form__control input[type='checkbox']:checked {
+  background: #37ee37;
+  border: #137713;
+} */
+
+.form__control:nth-child(4) {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr;
+  align-items: center;
+}
+
+.form button {
+  border: 1px solid #eed3d3;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.form button[type="submit"] {
+  background: #37ee37;
+}
+
+.form button[type="submit"]:disabled {
+  cursor: not-allowed;
+  background: #97f097;
+  color: rgb(131, 123, 123);
+}
+
+.form button[type="submit"]:hover
+.form button[type="submit"]:disabled {
+  cursor: not-allowed;
+  background: #97f097;
+  color: rgb(131, 123, 123);
+}
+
+.form button[type="submit"]:hover, 
+.form button[type="submmit"]:active {
+  cursor: pointer;
+  background: #fff;
+  color: #37ee37;
+}
+
+.form .cancel {
+  background: #cf2648;
+}
+
+.form .cancel:hover, 
+.form .cancel:active {
+  cursor: pointer;
+  background: #fff;
+  color: #cf2648;
+}
